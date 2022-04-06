@@ -1,19 +1,27 @@
-import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import Input from "../../shared/components/FormElements/Input";
+import Dropdown from "../../shared/components/FormElements/Dropdown";
+import Button from "../../shared/components/FormElements/Button";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import {
   VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
-} from '../../shared/util/validators';
-import { useForm } from '../../shared/hooks/form-hook';
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { AuthContext } from '../../shared/context/auth-context';
-import './PlaceForm.css';
+  VALIDATOR_MINLENGTH,
+} from "../../shared/util/validators";
+import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
+import "./PlaceForm.css";
+
+const dropDownItems = [
+  { value: "restaurant", label: "Restaurant" },
+  { value: "pub", label: "Pub" },
+  { value: "office", label: "Office" },
+  { value: "gym", label: "Gym" },
+];
 
 const NewPlace = () => {
   const auth = useContext(AuthContext);
@@ -21,39 +29,49 @@ const NewPlace = () => {
   const [formState, inputHandler] = useForm(
     {
       title: {
-        value: '',
-        isValid: false
+        value: "",
+        isValid: false,
       },
       description: {
-        value: '',
-        isValid: false
+        value: "",
+        isValid: false,
+      },
+      type: {
+        value: "",
+        isValid: false,
       },
       address: {
-        value: '',
-        isValid: false
+        value: "",
+        isValid: false,
       },
       image: {
         value: null,
-        isValid: false
-      }
+        isValid: false,
+      },
     },
     false
   );
 
   const history = useHistory();
 
-  const placeSubmitHandler = async event => {
+  const placeSubmitHandler = async (event) => {
     event.preventDefault();
     try {
       const formData = new FormData();
-      formData.append('title', formState.inputs.title.value);
-      formData.append('description', formState.inputs.description.value);
-      formData.append('address', formState.inputs.address.value);
-      formData.append('image', formState.inputs.image.value);
-      await sendRequest(`${process.env.REACT_APP_API_URL}/api/places`, 'POST', formData, {
-        Authorization: 'Bearer ' + auth.token
-      });
-      history.push('/');
+      formData.append("title", formState.inputs.title.value);
+      formData.append("description", formState.inputs.description.value);
+      formData.append("address", formState.inputs.address.value);
+      formData.append("image", formState.inputs.image.value);
+      formData.append("type", formState.inputs.type.value);
+      await sendRequest(
+        `${process.env.REACT_APP_API_URL}/api/places`,
+        "POST",
+        formData,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
+      history.push("/");
     } catch (err) {}
   };
 
@@ -78,6 +96,14 @@ const NewPlace = () => {
           validators={[VALIDATOR_MINLENGTH(5)]}
           errorText="Please enter a valid description (at least 5 characters)."
           onInput={inputHandler}
+        />
+        <Dropdown
+          id="type"
+          label="Type"
+          items={dropDownItems}
+          onInput={inputHandler}
+          formState={formState}
+          errorText="Please select a valid type"
         />
         <Input
           id="address"
