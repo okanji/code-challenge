@@ -7,7 +7,7 @@ function Dropdown({ items, onInput, id, label, errorText, formState }) {
   function handleChange(event) {
     const value = event.value;
 
-    onInput(id, value, false);
+    onInput(id, value, true);
     setDisplayError(false);
   }
 
