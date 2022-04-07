@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const { getMockReq, getMockRes } = require("@jest-mock/express");
-const { createPlace } = require("../controllers/places-controllers");
+const {
+  createPlace,
+  getAllPlaces,
+} = require("../controllers/places-controllers");
 const User = require("../models/user");
 
 jest.mock("express-validator", () => ({
@@ -34,6 +37,10 @@ describe("Places Controllers", () => {
     await mongoose.connection.db.createCollection("places");
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   afterAll(async () => {
     await mongoose.connection.db.dropDatabase();
     await mongoose.connection.close();
@@ -64,6 +71,50 @@ describe("Places Controllers", () => {
         place: expect.objectContaining({
           type: "office",
         }),
+      })
+    );
+  });
+
+  it("Should return all places", async () => {
+    // Add aditional place to places collection
+    const placeReq = getMockReq({
+      body: {
+        title: "Test title two",
+        description: "This is a test description two",
+        address: "805 TRU Way, Kamloops, BC V2C 0C8",
+        type: "pub",
+      },
+      file: {
+        path: "some/path",
+      },
+      userData: {
+        userId: createdUser.id,
+      },
+    });
+
+    const { res, next } = getMockRes();
+    await createPlace(placeReq, res, next);
+
+    const req = getMockReq();
+
+    await getAllPlaces(req, res, next);
+
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        places: expect.arrayContaining([
+          expect.objectContaining({
+            title: "Test title",
+            description: "This is a test description",
+            address: "983 Fernie Rd, Kamloops, BC",
+            type: "office",
+          }),
+          expect.objectContaining({
+            title: "Test title two",
+            description: "This is a test description two",
+            address: "805 TRU Way, Kamloops, BC V2C 0C8",
+            type: "pub",
+          }),
+        ]),
       })
     );
   });
