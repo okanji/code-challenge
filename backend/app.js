@@ -54,7 +54,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    `mongodb+srv://challenge:${process.env.MONGO_PASSWORD}@cluster0.v8ikp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+    `${process.env.MONGODB_URI}`
   )
   .then(() => {
     app.listen(PORT);
