@@ -13,18 +13,18 @@ GOOGLE_MAPS_EMBEDED_API_KEY=google cloud console api key
 
 **Deploy Locally**
 
-Set environment variables 
+- Set environment variables 
 
 ```bash
 > npm install
 > npm start
 ```
 
-Navigate to ***http://localhost:4000/*** in your browser
+- Navigate to ***http://localhost:4000/*** in your browser
 
 **Deploy on Heroku**
 
-Create a new project
-Link it to your github repo
-Remember to set the environment variables in project settings
+- Create a new project
+- Link it to your github repo
+- Remember to set the environment variables in project settings
 
