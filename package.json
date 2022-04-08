@@ -1,0 +1,23 @@
+{
+  "name": "code-challenge",
+  "version": "1.0.0",
+  "description": "Deployment",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "install-frontend": "cd frontend && npm install",
+    "start": "cd backend && npm run start",
+    "hroku-postbuild": "npm run install-frontend && npm run build"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okanji/code-challenge.git"
+  },
+  "author": "Oamar Kanji",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okanji/code-challenge/issues"
+  },
+  "homepage": "https://github.com/okanji/code-challenge#readme"
+}
