@@ -33,6 +33,24 @@ const getPlaceById = async (req, res, next) => {
   res.json({ place: place.toObject({ getters: true }) });
 };
 
+const getAllPlaces = async (req, res, next) => {
+  let allPlaces;
+
+  try {
+    allPlaces = await Place.find();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not find a place.",
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    places: allPlaces.map((place) => place.toObject({ getters: true })),
+  });
+};
+
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
@@ -224,3 +242,4 @@ exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
 exports.updatePlace = updatePlace;
 exports.deletePlace = deletePlace;
+exports.getAllPlaces = getAllPlaces;
