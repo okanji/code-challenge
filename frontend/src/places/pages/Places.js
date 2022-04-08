@@ -15,11 +15,11 @@ const Places = () => {
     const fetchPlacesAndUsers = async () => {
       try {
         const placesResponseData = await sendRequest(
-          `${process.env.REACT_APP_API_URL}/api/places`
+          `/api/places`
         );
 
         const usersResponseData = await sendRequest(
-          `${process.env.REACT_APP_API_URL}/api/users`
+          `/api/users`
         );
 
         const places = placesResponseData.places;

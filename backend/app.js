@@ -1,6 +1,6 @@
+require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
-require('dotenv').config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -29,6 +29,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/", express.static('../frontend/build'));
+
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
@@ -49,10 +51,6 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred!" });
 });
-
-this.app.use(
-  express.static(path.join(__dirname, "../frontend/build"))
-);
 
 mongoose
   .connect(
