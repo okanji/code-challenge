@@ -50,6 +50,10 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
+this.app.use(
+  express.static(path.join(__dirname, "../frontend/build"))
+);
+
 mongoose
   .connect(
     `mongodb+srv://challenge:${process.env.MONGO_PASSWORD}@cluster0.v8ikp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
